@@ -1,0 +1,40 @@
+# PDF source documents — too large for GitHub
+*.pdf
+1.4.23 Epstein Docs/
+Epstein Docs 1.5.24/
+Epstein docs 2/
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment — NEVER commit API keys
+.env
+.env.local
+.env.*.local
+
+# Vector database — large, rebuild with npm run ingest
+chroma_db/
+
+# Next.js build output
+.next/
+out/
+
+# TypeScript build output
+dist/
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/
