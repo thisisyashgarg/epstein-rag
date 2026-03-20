@@ -20,7 +20,7 @@ const CHROMA_PORT = 8001;
 const COLLECTION_NAME = "epstein_docs";
 const EMBED_MODEL = "text-embedding-3-small";
 const ANSWER_MODEL = "gpt-4o";
-const MIN_SCORE = 50; // minimum similarity % to show a source document
+const MIN_SCORE = 30; // minimum similarity % to show a source document
 
 const PDF_DIR_MAP: Record<string, string> = {
   "1.4.23 Epstein Docs": "/Users/yashgarg/Desktop/epstein-rag/1.4.23 Epstein Docs",
@@ -37,7 +37,9 @@ let chromaProcess: any = null;
 
 async function isChromaAlreadyRunning(): Promise<boolean> {
   try {
-    const resp = await fetch(`http://localhost:${CHROMA_PORT}/api/v2/heartbeat`);
+    const resp = await fetch(`http://localhost:${CHROMA_PORT}/api/v2/heartbeat`, {
+      signal: AbortSignal.timeout(2000), // don't hang if Chroma is partially up
+    });
     return resp.ok;
   } catch {
     return false;
@@ -45,6 +47,12 @@ async function isChromaAlreadyRunning(): Promise<boolean> {
 }
 
 async function startChromaServer(): Promise<void> {
+  // When running `npm run server`, ChromaDB is managed separately
+  if (process.env.SKIP_CHROMA) {
+    console.log(`⏭️  Skipping ChromaDB spawn (SKIP_CHROMA=1) — expecting it on port ${CHROMA_PORT}`);
+    return;
+  }
+
   // If ChromaDB is already up (e.g. ts-node-dev hot-restart), reuse it
   if (await isChromaAlreadyRunning()) {
     console.log(`♻️  ChromaDB already running at http://localhost:${CHROMA_PORT} — reusing`);
@@ -56,7 +64,12 @@ async function startChromaServer(): Promise<void> {
 
     // Try to find chroma in common locations
     const venvChroma = path.resolve(__dirname, "../../ingest/venv/bin/chroma");
-    const chromaBin = fs.existsSync(venvChroma) ? venvChroma : "chroma";
+    const pyenvChroma = "/Users/yashgarg/.pyenv/versions/3.11.6/bin/chroma";
+    const chromaBin = fs.existsSync(venvChroma)
+      ? venvChroma
+      : fs.existsSync(pyenvChroma)
+        ? pyenvChroma
+        : "chroma";
 
     chromaProcess = spawn(
       chromaBin,

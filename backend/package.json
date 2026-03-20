@@ -5,6 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "chroma": "/Users/yashgarg/.pyenv/versions/3.11.6/bin/chroma run --path ../chroma_db --port 8001",
+    "server": "SKIP_CHROMA=1 ts-node-dev --respawn --transpile-only src/index.ts",
     "ingest": "ts-node-dev --transpile-only src/ingest.ts",
     "build": "tsc",
     "start": "node dist/index.js"
