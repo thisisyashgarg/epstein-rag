@@ -20,12 +20,13 @@ const CHROMA_PORT = 8001;
 const COLLECTION_NAME = "epstein_docs";
 const EMBED_MODEL = "text-embedding-3-small";
 const ANSWER_MODEL = "gpt-4o";
-const MIN_SCORE = 30; // minimum similarity % to show a source document
+const MIN_SCORE = 20; // minimum similarity % to show a source document
 
 const PDF_DIR_MAP: Record<string, string> = {
-  "1.4.23 Epstein Docs": "/Users/yashgarg/Desktop/epstein-rag/1.4.23 Epstein Docs",
-  "Epstein Docs 1.5.24": "/Users/yashgarg/Desktop/epstein-rag/Epstein Docs 1.5.24",
-  "Epstein docs 2": "/Users/yashgarg/Desktop/epstein-rag/Epstein docs 2",
+  "1.4.23 Epstein Docs": path.resolve(__dirname, "../../pdfs/1.4.23 Epstein Docs"),
+  "Epstein Docs 1.5.24": path.resolve(__dirname, "../../pdfs/Epstein Docs 1.5.24"),
+  "Epstein docs 2": path.resolve(__dirname, "../../pdfs/Epstein docs 2"),
+  "pdfs": path.resolve(__dirname, "../../pdfs"),
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
